@@ -21,7 +21,7 @@ function timeZoneGenerator(){
 
   var jsonpLoader = document.createElement('script');
 
-  jsonpLoader.src = "source/timezones.json";
+  jsonpLoader.src = "data/timezones.json";
 
   document.body.appendChild(jsonpLoader);  
 
