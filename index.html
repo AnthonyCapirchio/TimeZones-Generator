@@ -1,23 +1,71 @@
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TimeZones Generator</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" href="vendors/codemirror-5.0/lib/codemirror.css">
 	<link rel="stylesheet" href="vendors/codemirror-5.0/theme/monokai.css">
 </head>
 <body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">TimeZones Generator</a>
+        </div>
+      </div>
+    </nav>
 
-	<form name="generate">
+    <div class="container" id="main">
 
-		<label>Template</label>
-		<select name="template">
-			<option value="php">PHP</option>
-			<option value="json">JSON</option>
-		</select>
-		<input type="submit" value="Generate">
-	</form>
+    	<div class="col-md-4">
+			<form name="generate">
+				<p>
+					<label>Template</label>
+					<select name="template" class="form-control">
+						<option value="php">PHP</option>
+						<option value="json">JSON</option>
+					</select>
+				</p>
+				<p>
+					<label>Start tag</label>
+					<input name="startTag" class="form-control" value="var timeZones = [" />
+				</p>
+				<p>
+					<label>Entry</label>
+					<input name="entry" class="form-control" value='"{TEXT}" : "{OFFSET}"' />
+				</p>
+				<p>
+					<label>Separator</label>
+					<input name="separator" class="form-control" value="," />
+				</p>
+				<p>
+					<label>End tag</label>
+					<input name="endTag" class="form-control" value="];" />
+				</p>
+				<input type="submit" value="Generate" class="btn btn-primary">
+			</form>
+    	</div>
 
-	<textarea id="output" style="width:100%; height:200px;"></textarea>
+    	<div class="col-md-8">
+    		<label>Output</label>
+			<textarea id="output" style="width:100%; height:200px;"></textarea>
+    	</div>
+
+
+    </div><!-- /.container -->
+
+    <style type="text/css">
+    	#main{
+    		margin-top:100px;
+    	}
+    	.CodeMirror {
+		  border: 1px solid #eee;
+		  height: auto;
+		}
+    </style>
 
 	<script src="vendors/codemirror-5.0/lib/codemirror.js"></script>
 	<script src="vendors/codemirror-5.0/mode/javascript/javascript.js"></script>
@@ -28,14 +76,20 @@
 		var outputField = document.getElementById('output');
 
 		var cm = CodeMirror.fromTextArea(outputField, {
-			theme: 'monokai'
+			theme 			: 'monokai',
+			viewportMargin 	: Infinity
 		});
 
 		document.generate.addEventListener('submit', function(e){
 			
 			e.preventDefault();
 
-			var timeZones = timeZoneGenerator.generate(document.generate.template.value);
+			var timeZones = timeZoneGenerator.generate({
+					startTag  : document.generate.startTag.value,
+					endTag    : document.generate.endTag.value,
+					separator : document.generate.separator.value,
+					entry     : document.generate.entry.value
+			}, true);
 
 			cm.setValue(timeZones);
 			

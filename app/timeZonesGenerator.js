@@ -36,7 +36,10 @@ function timeZoneGenerator(){
     
     var output = template.startTag ? template.startTag : "";
 
+    output += "\n";
+
     for(var i = 0; i < timeZones.length; i++){
+      output += "\t";
       output += template.entry.replace('{VALUE}'  , timeZones[i].value)
                               .replace('{ABBR}'   , timeZones[i].abbr)
                               .replace('{OFFSET}' , timeZones[i].offset)
@@ -44,6 +47,8 @@ function timeZoneGenerator(){
                               .replace('{TEXT}'   , timeZones[i].text);
 
       if(template.separator) output += template.separator;
+
+      output += "\n"
     }
 
     return template.endTag ? output + template.endTag : output;
@@ -58,6 +63,7 @@ function timeZoneGenerator(){
      * @return {[type]}          [description]
      */
     generate: function(template, inline){
+
 
       if(!dataLoaded){
         throw "Datas not loaded";
