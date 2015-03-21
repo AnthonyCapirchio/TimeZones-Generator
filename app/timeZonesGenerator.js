@@ -3,21 +3,7 @@
 function timeZoneGenerator(){
 
   var dataLoaded  = false,
-      timeZones,
-      templates   = {
-        json  : {
-          startTag  : '[\n',
-          endTag    : ']',
-          separator : ',\n',
-          entry     : '\t{\n\t\t"{TEXT}": "{OFFSET}"\n\t}'
-        },
-        php   : {
-          startTag  : 'array(\n',
-          endTag    : ')',
-          separator : ',\n',
-          entry     : '\t"{TEXT}" => "{OFFSET}"'
-        }
-      };
+      timeZones;
 
   var jsonpLoader = document.createElement('script');
 
@@ -25,19 +11,24 @@ function timeZoneGenerator(){
 
   document.body.appendChild(jsonpLoader);  
 
-  // {
-  //  "value": "Pacific Standard Time (Mexico)",
-  //  "abbr": "PDT",
-  //  "offset": -7,
-  //  "isdst": true,
-  //  "text": "(UTC-08:00) Baja California"
-  // }
-  function generate(template){
+  /**
+   * [_generate description]
+   * @param  {[type]} template [description]
+   * @return {[type]}          [description]
+   */
+  function _generate(template){
     
     var output = template.startTag ? template.startTag : "";
 
     output += "\n";
 
+    // {
+    //  "value": "Pacific Standard Time (Mexico)",
+    //  "abbr": "PDT",
+    //  "offset": -7,
+    //  "isdst": true,
+    //  "text": "(UTC-08:00) Baja California"
+    // }
     for(var i = 0; i < timeZones.length; i++){
       output += "\t";
       output += template.entry.replace('{VALUE}'  , timeZones[i].value)
@@ -62,24 +53,13 @@ function timeZoneGenerator(){
      * @param  {[type]} inline   [description]
      * @return {[type]}          [description]
      */
-    generate: function(template, inline){
-
+    generate: function(template){
 
       if(!dataLoaded){
         throw "Datas not loaded";
       }
 
-      if(inline){
-        return generate(template);
-      }
-      else{
-        if(templates[template]){
-          return generate(templates[template]);
-        }
-        else{
-          throw "Unknow template";
-        }
-      }
+      return _generate(template);
     },
 
     /**
