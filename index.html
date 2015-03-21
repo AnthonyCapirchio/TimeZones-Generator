@@ -27,6 +27,7 @@
             <select name="preset" class="form-control">
               <option value="php">PHP</option>
               <option value="json">JSON</option>
+              <option value="coffee">CoffeeScript</option>
               <option value="python">Python</option>
             </select>
           </p>
@@ -119,6 +120,12 @@
             startTag  : 'var timeZones = [',
             endTag    : '];',
             separator : ',',
+            entry     : '{"{TEXT}": "{OFFSET}"}'
+          },
+          coffee  : {
+            startTag  : 'timeZones = [',
+            endTag    : ']',
+            separator : '',
             entry     : '{"{TEXT}": "{OFFSET}"}'
           },
           php   : {
