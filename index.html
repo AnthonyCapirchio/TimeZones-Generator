@@ -21,33 +21,70 @@
     <div class="container" id="main">
 
       <div class="col-md-4">
-      <form name="generate">
-        <p>
-          <label>Preset</label>
-          <select name="preset" class="form-control">
-            <option value="php">PHP</option>
-            <option value="json">JSON</option>
-            <option value="python">Python</option>
-          </select>
-        </p>
-        <p>
-          <label>Start tag</label>
-          <input name="startTag" class="form-control" value="var timeZones = [" />
-        </p>
-        <p>
-          <label>Entry</label>
-          <input name="entry" class="form-control" value='"{TEXT}" : "{OFFSET}"' />
-        </p>
-        <p>
-          <label>Separator</label>
-          <input name="separator" class="form-control" value="," />
-        </p>
-        <p>
-          <label>End tag</label>
-          <input name="endTag" class="form-control" value="];" />
-        </p>
-        <input type="submit" value="Generate" class="btn btn-primary">
-      </form>
+        <form name="generate">
+          <p>
+            <label>Preset</label>
+            <select name="preset" class="form-control">
+              <option value="php">PHP</option>
+              <option value="json">JSON</option>
+              <option value="python">Python</option>
+            </select>
+          </p>
+          <p>
+            <label>Start tag</label>
+            <input name="startTag" class="form-control" value="var timeZones = [" />
+          </p>
+          <p>
+            <label>Entry</label>
+            <input name="entry" class="form-control" value='"{TEXT}" : "{OFFSET}"' />
+          </p>
+          <p>
+            <label>Separator</label>
+            <input name="separator" class="form-control" value="," />
+          </p>
+          <p>
+            <label>End tag</label>
+            <input name="endTag" class="form-control" value="];" />
+          </p>
+          <p>
+            <input type="submit" value="Generate" class="btn btn-primary">
+          </p>
+          
+          <h4>Available template tags</h4>
+          
+          <table id="available-tags" class="table table-condensed">
+            <tr>
+              <th>Name</th>
+              <th>Tag</th>
+              <th>Data sample</th>
+            </tr>
+            <tr>
+              <td>Text</td>
+              <td><b>{TEXT}</b></td>
+              <td>(UTC+01:00) Brussels, Copenhagen, Madrid, Paris</td>
+            </tr>
+            <tr>
+              <td>Value</td>
+              <td><b>{VALUE}</b></td>
+              <td>Romance Standard Time</td>
+            </tr>
+            <tr>
+              <td>Abbr</td>
+              <td><b>{ABBR}</b></td>
+              <td>RDT</td>
+            </tr>
+            <tr>
+              <td>Offset</td>
+              <td><b>{OFFSET}</b></td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>Isdst</td>
+              <td><b>{ISDST}</b></td>
+              <td>true</td>
+            </tr>
+          </table>
+        </form>
       </div>
 
       <div class="col-md-8">
@@ -59,13 +96,16 @@
     </div><!-- /.container -->
 
     <style type="text/css">
+      #available-tags, .CodeMirror{
+        font-size: 0.7em;
+      }
       #main{
         margin-top:100px;
       }
       .CodeMirror {
-      border: 1px solid #eee;
-      height: auto;
-    }
+        border: 1px solid #eee;
+        height: auto;
+      }
     </style>
 
   <script src="vendors/codemirror-5.0/lib/codemirror.js"></script>
