@@ -1,6 +1,6 @@
-"use strict"
-
-function timeZoneGenerator(){
+var timeZoneGenerator = (function(){
+  
+  "use strict"
 
   var dataLoaded  = false,
       timeZones;
@@ -71,6 +71,4 @@ function timeZoneGenerator(){
       timeZones   = timeZonesObject;
     }
   }
-}
-
-var timeZoneGenerator = new timeZoneGenerator();
+})();
