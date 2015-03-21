@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+  <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>TimeZones Generator</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<link rel="stylesheet" href="vendors/codemirror-5.0/lib/codemirror.css">
-	<link rel="stylesheet" href="vendors/codemirror-5.0/theme/monokai.css">
+  <title>TimeZones Generator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="vendors/codemirror-5.0/lib/codemirror.css">
+  <link rel="stylesheet" href="vendors/codemirror-5.0/theme/monokai.css">
 </head>
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">TimeZones Generator</a>
@@ -20,81 +20,109 @@
 
     <div class="container" id="main">
 
-    	<div class="col-md-4">
-			<form name="generate">
-				<p>
-					<label>Template</label>
-					<select name="template" class="form-control">
-						<option value="php">PHP</option>
-						<option value="json">JSON</option>
-					</select>
-				</p>
-				<p>
-					<label>Start tag</label>
-					<input name="startTag" class="form-control" value="var timeZones = [" />
-				</p>
-				<p>
-					<label>Entry</label>
-					<input name="entry" class="form-control" value='"{TEXT}" : "{OFFSET}"' />
-				</p>
-				<p>
-					<label>Separator</label>
-					<input name="separator" class="form-control" value="," />
-				</p>
-				<p>
-					<label>End tag</label>
-					<input name="endTag" class="form-control" value="];" />
-				</p>
-				<input type="submit" value="Generate" class="btn btn-primary">
-			</form>
-    	</div>
+      <div class="col-md-4">
+      <form name="generate">
+        <p>
+          <label>Preset</label>
+          <select name="preset" class="form-control">
+            <option value="php">PHP</option>
+            <option value="json">JSON</option>
+          </select>
+        </p>
+        <p>
+          <label>Start tag</label>
+          <input name="startTag" class="form-control" value="var timeZones = [" />
+        </p>
+        <p>
+          <label>Entry</label>
+          <input name="entry" class="form-control" value='"{TEXT}" : "{OFFSET}"' />
+        </p>
+        <p>
+          <label>Separator</label>
+          <input name="separator" class="form-control" value="," />
+        </p>
+        <p>
+          <label>End tag</label>
+          <input name="endTag" class="form-control" value="];" />
+        </p>
+        <input type="submit" value="Generate" class="btn btn-primary">
+      </form>
+      </div>
 
-    	<div class="col-md-8">
-    		<label>Output</label>
-			<textarea id="output" style="width:100%; height:200px;"></textarea>
-    	</div>
+      <div class="col-md-8">
+        <label>Output</label>
+      <textarea id="output" style="width:100%; height:200px;"></textarea>
+      </div>
 
 
     </div><!-- /.container -->
 
     <style type="text/css">
-    	#main{
-    		margin-top:100px;
-    	}
-    	.CodeMirror {
-		  border: 1px solid #eee;
-		  height: auto;
-		}
+      #main{
+        margin-top:100px;
+      }
+      .CodeMirror {
+      border: 1px solid #eee;
+      height: auto;
+    }
     </style>
 
-	<script src="vendors/codemirror-5.0/lib/codemirror.js"></script>
-	<script src="vendors/codemirror-5.0/mode/javascript/javascript.js"></script>
-	<script src="vendors/codemirror-5.0/mode/php/php.js"></script>
-	<script type="text/javascript" src="app/timeZonesGenerator.js"></script>
-	<script type="text/javascript">
+  <script src="vendors/codemirror-5.0/lib/codemirror.js"></script>
+  <script src="vendors/codemirror-5.0/mode/javascript/javascript.js"></script>
+  <script src="vendors/codemirror-5.0/mode/php/php.js"></script>
+  <script type="text/javascript" src="app/timeZonesGenerator.js"></script>
+  <script type="text/javascript">
 
-		var outputField = document.getElementById('output');
+    var preset      = {
+          json  : {
+            startTag  : 'var timeZones = [',
+            endTag    : '];',
+            separator : ',',
+            entry     : '{"{TEXT}": "{OFFSET}"}'
+          },
+          php   : {
+            startTag  : '$timeZones = array(',
+            endTag    : ');',
+            separator : ',',
+            entry     : '"{TEXT}" => "{OFFSET}"'
+          }
+        },
+        outputField = document.getElementById('output'),
+        cm          = CodeMirror.fromTextArea(outputField, {
+          theme       : 'monokai',
+          viewportMargin  : Infinity
+        }),
+        form        = document.generate;
 
-		var cm = CodeMirror.fromTextArea(outputField, {
-			theme 			: 'monokai',
-			viewportMargin 	: Infinity
-		});
 
-		document.generate.addEventListener('submit', function(e){
-			
-			e.preventDefault();
+    function presetHandler(presetName){
+      form.startTag.value  = preset[presetName].startTag;
+      form.endTag.value    = preset[presetName].endTag;
+      form.separator.value = preset[presetName].separator;
+      form.entry.value     = preset[presetName].entry;
+    }
 
-			var timeZones = timeZoneGenerator.generate({
-					startTag  : document.generate.startTag.value,
-					endTag    : document.generate.endTag.value,
-					separator : document.generate.separator.value,
-					entry     : document.generate.entry.value
-			}, true);
+    form.preset.addEventListener('change', function(){
+      presetHandler(this.value);
+    });
 
-			cm.setValue(timeZones);
-			
-		});
+    presetHandler('php');
 
-	</script>
+    form.addEventListener('submit', function(e){
+      
+      e.preventDefault();
+
+      var timeZones = timeZoneGenerator.generate({
+          startTag  : form.startTag.value,
+          endTag    : form.endTag.value,
+          separator : form.separator.value,
+          entry     : form.entry.value
+      }, true);
+
+      cm.setValue(timeZones);
+      
+    });
+
+  </script>
 </body>
 </html>
